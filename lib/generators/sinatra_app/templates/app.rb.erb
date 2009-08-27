@@ -6,6 +6,7 @@ require "logger"
 require "haml"
 require "sequel"
 require "sequel/extensions/blank"
+require "sequel/extensions/inflector"
 require "sinatra/base"
 require "sinatra/async"
 require "sinatra/respond_to"
@@ -47,13 +48,15 @@ module <%= name %>
       end
 
       # load helpers
-      Dir.glob(File.join(base_path, "helpers", "*.rb")).each do |h|
-        require h
-      end
       helpers do
         alias_method :h, :escape_html
         def config
           <%= name %>::App.config
+        end
+        Dir.glob(File.join(base_path, "helpers", "*.rb")).each do |h|
+          require h
+          module_name = "#{File.basename(h, ".rb").camelize}Helper"
+          include Blog.const_get(module_name) if Blog.const_defined?(module_name)
         end
       end
 
