@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sinatra_app_gen}
-  s.version = "0.0.1"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jonathan Tron", "Joseph Halter"]
@@ -17,7 +17,6 @@ Gem::Specification.new do |s|
   s.files = [
     ".gitignore",
      "Rakefile",
-     "VERSION",
      "VERSION.yml",
      "bin/sinatra_app",
      "lib/generators/sinatra_app/sinatra_app_generator.rb",
