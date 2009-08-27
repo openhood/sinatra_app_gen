@@ -28,7 +28,8 @@ Gem::Specification.new do |s|
      "lib/generators/sinatra_app/templates/features/support/paths.rb.erb",
      "lib/generators/sinatra_app/templates/geminstaller.yml.erb",
      "lib/generators/sinatra_app/templates/lib/rack_fix.rb.erb",
-     "lib/generators/sinatra_app/templates/spec/spec_helper.rb.erb"
+     "lib/generators/sinatra_app/templates/spec/spec_helper.rb.erb",
+     "sinatra_app_gen.gemspec"
   ]
   s.has_rdoc = true
   s.homepage = %q{http://github.com/openhood/sinatra_app_gen}
