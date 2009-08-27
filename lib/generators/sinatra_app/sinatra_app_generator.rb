@@ -6,9 +6,9 @@ class SinatraAppGenerator < RubiGen::Base
 
   def initialize(runtime_args, runtime_options = {})
     super
-    usage if args.empty?
+    usage if args.size<2
+    @name = args.pop.classify
     @destination_root = File.expand_path(args.shift)
-    @name = base_name
   end
 
   def template(m, filename)
@@ -49,7 +49,7 @@ class SinatraAppGenerator < RubiGen::Base
       <<-EOS
 Creates a new Sinatra / Sequel / rspec / cucumber app.
 
-USAGE: #{spec.name} module_name
+USAGE: #{spec.name} ModuleName directory_name
 
 EOS
     end
