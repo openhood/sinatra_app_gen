@@ -9,7 +9,7 @@ require "sequel/extensions/migration"
 require "rspec_sequel_matchers"
 
 # Set the Sinatra environment
-<%= name.camelize %>::App.configure do |c|
+<%= name %>::App.configure do |c|
   c.set     :environment, :test
   c.disable :run
   c.enable  :raise_errors
