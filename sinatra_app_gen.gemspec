@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.files = [
     ".gitignore",
      "Rakefile",
-     "VERSION",
+     "VERSION.yml",
      "bin/sinatra_app",
      "lib/generators/sinatra_app/sinatra_app_generator.rb",
      "lib/generators/sinatra_app/templates/Rakefile.erb",
@@ -31,11 +31,10 @@ Gem::Specification.new do |s|
      "lib/generators/sinatra_app/templates/spec/spec_helper.rb.erb",
      "sinatra_app_gen.gemspec"
   ]
-  s.has_rdoc = true
   s.homepage = %q{http://github.com/openhood/sinatra_app_gen}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.2}
+  s.rubygems_version = %q{1.3.4}
   s.summary = %q{Creates a new Sinatra / Sequel / rspec / cucumber app.}
 
   if s.respond_to? :specification_version then
