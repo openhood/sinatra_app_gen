@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sinatra_app_gen}
-  s.version = "0.1.2"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jonathan Tron", "Joseph Halter"]
@@ -31,10 +31,11 @@ Gem::Specification.new do |s|
      "lib/generators/sinatra_app/templates/spec/spec_helper.rb.erb",
      "sinatra_app_gen.gemspec"
   ]
+  s.has_rdoc = true
   s.homepage = %q{http://github.com/openhood/sinatra_app_gen}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.4}
+  s.rubygems_version = %q{1.3.2}
   s.summary = %q{Creates a new Sinatra / Sequel / rspec / cucumber app.}
 
   if s.respond_to? :specification_version then
