@@ -56,7 +56,7 @@ module <%= name %>
         Dir.glob(File.join(base_path, "helpers", "*.rb")).each do |h|
           require h
           module_name = "#{File.basename(h, ".rb").camelize}Helper"
-          include Blog.const_get(module_name) if Blog.const_defined?(module_name)
+          include <%= name %>.const_get(module_name) if <%= name %>.const_defined?(module_name)
         end
       end
 
