@@ -1,0 +1,35 @@
+ENV["RACK_ENV"] = "test"
+
+# Load the Sinatra app
+require File.join(File.dirname(__FILE__), "..", "app")
+
+# Load the testing libraries
+require "spec"
+require "sequel/extensions/migration"
+require "rspec_sequel_matchers"
+
+# Set the Sinatra environment
+<%= name.camelize %>::App.configure do |c|
+  c.set     :environment, :test
+  c.disable :run
+  c.enable  :raise_errors
+  c.disable :logging
+end
+
+Spec::Runner.configure do |config|
+  config.include(RspecSequel::Matchers)
+  
+  config.before(:suite) do
+    Sequel::Model.db.tables.each do |table_name|
+      Sequel::Model.db.drop_table table_name
+    end
+    dirname = File.join(File.dirname(__FILE__), "..", "migrations")
+    Sequel::Migrator.apply(Sequel::Model.db, dirname) if File.directory?(dirname)
+  end
+
+  config.after(:each) do
+    Sequel::Model.db.tables.each do |table_name|
+      Sequel::Model.db["TRUNCATE #{table_name}"]
+    end
+  end
+end

@@ -1,0 +1,75 @@
+require "rubygems"
+require "openssl" # let this here or Sequel causes Thin to crash later on...
+require "yaml"
+require "yajl"
+require "logger"
+require "haml"
+require "sequel"
+require "sequel/extensions/blank"
+require "sinatra/base"
+require "sinatra/async"
+require "sinatra/respond_to"
+require "rack-flash"
+require "string_cleaner"
+require "lib/rack_fix" # until rack escape UTF-8 as expected
+
+module <%= name.camelize %>
+  class App < Sinatra::Base
+
+    def self.base_path
+      File.dirname(__FILE__)
+    end
+
+    # load environment config
+    def self.config
+      @@config ||= begin
+        filename = File.join(File.dirname(__FILE__), "config", "#{environment}.yml")
+        File.exists?(filename) ? YAML.load_file(filename) : {:db => {:uri => "sqlite:/"}}
+      end
+    end
+
+    configure do 
+      set :static, true
+      set :public, File.join(base_path, "public")
+      set :views, File.join(base_path, "views")
+      enable :logging
+      enable :sessions
+
+      # setup logger and connect to db
+      FileUtils.mkdir_p File.join(base_path, "log")
+      logger = Logger.new(File.join(base_path, "log", "#{environment}.log"))
+      logger.level = production? ? Logger::ERROR : Logger::DEBUG
+      Sequel.connect(config[:db][:uri], :loggers => [logger])
+
+      # load models
+      Dir.glob(File.join(base_path, "models", "*.rb")).each do |m|
+        require m
+      end
+
+      # load helpers
+      Dir.glob(File.join(base_path, "helpers", "*.rb")).each do |h|
+        require h
+      end
+      helpers do
+        alias_method :h, :escape_html
+        def config
+          <%= name.camelize %>::App.config
+        end
+      end
+
+      use Rack::Session::Cookie
+      use Rack::Flash
+    end
+
+    # load fake controllers
+    Dir.glob(File.join(base_path, "controllers", "*.rb")).each do |c|
+      require c
+    end
+
+  end
+end
+
+# define default port if launched directly via "ruby app.rb"
+if $0 == __FILE__
+  <%= name.camelize %>::App.run! :host => "localhost", :port => 4567
+end
