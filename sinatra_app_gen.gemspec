@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sinatra_app_gen}
-  s.version = "0.1.3"
+  s.version = "0.1.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jonathan Tron", "Joseph Halter"]
-  s.date = %q{2009-08-27}
+  s.date = %q{2009-08-29}
   s.default_executable = %q{sinatra_app}
   s.description = %q{Our default app template}
   s.email = %q{team@openhood.com}
@@ -35,12 +35,12 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/openhood/sinatra_app_gen}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.2}
+  s.rubygems_version = %q{1.3.1}
   s.summary = %q{Creates a new Sinatra / Sequel / rspec / cucumber app.}
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
-    s.specification_version = 3
+    s.specification_version = 2
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<rspec>, ["~> 1.2.6"])
