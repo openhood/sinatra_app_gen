@@ -17,10 +17,6 @@ require "lib/rack_fix" # until rack escape UTF-8 as expected
 module <%= name %>
   class App < Sinatra::Base
 
-    def self.base_path
-      File.dirname(__FILE__)
-    end
-
     # load environment config
     def self.config
       @@config ||= begin
@@ -29,21 +25,22 @@ module <%= name %>
       end
     end
 
-    configure do 
+    configure do
+      set :root, File.dirname(__FILE__)
       set :static, true
-      set :public, File.join(base_path, "public")
-      set :views, File.join(base_path, "views")
+      set :public, File.join(root, "public")
+      set :views, File.join(root, "views")
       enable :logging
       enable :sessions
 
       # setup logger and connect to db
-      FileUtils.mkdir_p File.join(base_path, "log")
-      logger = Logger.new(File.join(base_path, "log", "#{environment}.log"))
+      FileUtils.mkdir_p File.join(root, "log")
+      logger = Logger.new(File.join(root, "log", "#{environment}.log"))
       logger.level = production? ? Logger::ERROR : Logger::DEBUG
       Sequel.connect(config[:db][:uri], :loggers => [logger])
 
       # load models
-      Dir.glob(File.join(base_path, "models", "*.rb")).each do |m|
+      Dir.glob(File.join(root, "models", "*.rb")).each do |m|
         require m
       end
 
@@ -53,7 +50,7 @@ module <%= name %>
         def config
           <%= name %>::App.config
         end
-        Dir.glob(File.join(base_path, "helpers", "*.rb")).each do |h|
+        Dir.glob(File.join(root, "helpers", "*.rb")).each do |h|
           require h
           module_name = "#{File.basename(h, ".rb").camelize}Helper"
           include <%= name %>.const_get(module_name) if <%= name %>.const_defined?(module_name)
@@ -65,7 +62,7 @@ module <%= name %>
     end
 
     # load fake controllers
-    Dir.glob(File.join(base_path, "controllers", "*.rb")).each do |c|
+    Dir.glob(File.join(root, "controllers", "*.rb")).each do |c|
       require c
     end
 
