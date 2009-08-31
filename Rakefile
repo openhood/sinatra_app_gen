@@ -14,6 +14,7 @@ begin
     gem.add_dependency "rspec", "~> 1.2.6"
     gem.add_dependency "cucumber", "~> 0.3.97"
     gem.add_dependency "sequel", ">= 3.2.0"
+    gem.add_development_dependency "jeweler"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
 rescue LoadError
