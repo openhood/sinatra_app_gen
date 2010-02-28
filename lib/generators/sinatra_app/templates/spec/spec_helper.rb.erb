@@ -4,9 +4,12 @@ ENV["RACK_ENV"] = "test"
 require File.join(File.dirname(__FILE__), "..", "app")
 
 # Load the testing libraries
-require "spec"
+require "rspec"
+
+<% if use_sequel? -%>
 require "sequel/extensions/migration"
 require "rspec_sequel_matchers"
+<% end -%>
 
 # Set the Sinatra environment
 <%= name %>::App.configure do |c|
@@ -17,8 +20,9 @@ require "rspec_sequel_matchers"
 end
 
 Spec::Runner.configure do |config|
+  <% if use_sequel? -%>
   config.include(RspecSequel::Matchers)
-  
+
   config.before(:suite) do
     Sequel::Model.db.tables.each do |table_name|
       Sequel::Model.db.drop_table table_name
@@ -26,10 +30,14 @@ Spec::Runner.configure do |config|
     dirname = File.join(<%= name %>::App.root, "..", "migrations")
     Sequel::Migrator.apply(Sequel::Model.db, dirname) if File.directory?(dirname)
   end
-
   config.after(:each) do
     Sequel::Model.db.tables.each do |table_name|
       Sequel::Model.db["TRUNCATE #{table_name}"]
     end
   end
+  <% elsif use_mongomapper? -%>
+  config.before(:each) do
+    ::MongoMapper.database.collections.each{|c| c.remove}
+  end
+  <% end -%>
 end

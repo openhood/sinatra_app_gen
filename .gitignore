@@ -3,3 +3,7 @@
 coverage
 rdoc
 pkg
+tmp
+demo_sequel
+demo_mongomapper
+.bundle

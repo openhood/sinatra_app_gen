@@ -1,6 +1,8 @@
 require "sinatra_rake_tasks"
 OpenHood::Rake::SpecTask.new
 OpenHood::Rake::CucumberTask.new
+<% if use_sequel? -%>
 OpenHood::Rake::SequelTask.new
+<% end -%>
 OpenHood::Rake::CITask.new
 OpenHood::Rake::ConsoleTask.new

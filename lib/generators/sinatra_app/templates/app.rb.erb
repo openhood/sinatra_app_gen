@@ -1,18 +1,31 @@
-require "rubygems"
-require "openssl" # let this here or Sequel causes Thin to crash later on...
+begin
+  # Try to require the preresolved locked set of gems.
+  require File.expand_path('../.bundle/environment', __FILE__)
+rescue LoadError
+  # Fall back on doing an unlocked resolve at runtime.
+  require "rubygems"
+  require "bundler"
+  Bundler.setup
+end
+
+bundle_env = [:default]
+bundle_env << ENV["RACK_ENV"].to_sym if ENV["RACK_ENV"]
+Bundler.require *bundle_env
+
 require "yaml"
+require "logger"
 require "yajl"
 require "logger"
 require "haml"
+<% if use_sequel? -%>
 require "sequel"
 require "sequel/extensions/blank"
 require "sequel/extensions/inflector"
+<% end -%>
 require "sinatra/base"
 require "sinatra/async"
-require "sinatra/respond_to"
 require "rack-flash"
 require "string_cleaner"
-require "lib/rack_fix" # until rack escape UTF-8 as expected
 
 module <%= name %>
   class App < Sinatra::Base

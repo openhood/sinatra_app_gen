@@ -2,13 +2,14 @@ class SinatraAppGenerator < RubiGen::Base
   DEFAULT_SHEBANG = File.join(Config::CONFIG['bindir'],
                               Config::CONFIG['ruby_install_name'])
 
-  attr_reader :name
+  attr_reader :name, :orm
 
   def initialize(runtime_args, runtime_options = {})
     super
     usage if args.empty?
     @destination_root = File.expand_path(args.shift)
     @name = (args.shift || base_name).camelize
+    @orm = (args.shift || "Sequel").underscore
   end
 
   def template(m, filename)
@@ -24,7 +25,7 @@ class SinatraAppGenerator < RubiGen::Base
       # root
       template m, "app.rb"
       template m, "config.ru"
-      template m, "geminstaller.yml"
+      template m, "Gemfile"
       template m, "Rakefile"
 
       # cucumber
@@ -32,24 +33,34 @@ class SinatraAppGenerator < RubiGen::Base
       m.directory "features/step_definitions"
       template m, "features/support/env.rb"
       template m, "features/support/paths.rb"
-      template m, "features/step_definitions/webrat_steps.rb"
+      template m, "features/step_definitions/web_steps.rb"
 
       # rspec
       m.directory "spec"
       template m, "spec/spec_helper.rb"
+      m.directory "spec/support"
+      template m, "spec/support/blueprints.rb"
 
       # lib
       m.directory "lib"
       template m, "lib/rack_fix.rb"
     end
   end
-
+  
   protected
+    def use_sequel?
+      @orm.eql?("sequel")
+    end
+
+    def use_mongomapper?
+      @orm.eql?("mongomapper")
+    end
+
     def banner
       <<-EOS
-Creates a new Sinatra / Sequel / rspec / cucumber app.
+Creates a new Sinatra / Sequel or MongoMapper / RSpec / Cucumber app.
 
-USAGE: #{spec.name} directory_name [module_name]
+USAGE: #{spec.name} directory_name [module_name] [orm]
 
 EOS
     end

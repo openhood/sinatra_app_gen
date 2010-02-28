@@ -1,0 +1,41 @@
+source :gemcutter
+source "http://gems.github.com"
+
+gem "thin"
+gem "sinatra", "~> 1.0a"
+gem "raggi-async_sinatra"
+gem "haml", ">= 2.2.2"
+gem "yajl-ruby"
+<% if use_sequel? -%>
+gem "kamk-pg"
+gem "sequel"
+<% elsif use_mongomapper? -%>
+gem "mongo_ext", :require => nil
+gem "mongo_mapper"
+<% end -%>
+gem "JosephHalter-string_cleaner"
+gem "nakajima-rack-flash"
+gem "openhood-sinatra_rake_tasks"
+
+group :development do
+  gem "shotgun"
+end
+
+group :test, :cucumber do
+  gem "timecop"
+  <% if use_mongomapper? -%>
+  gem "machinist_mongo", :require => "machinist/mongo_mapper"  
+  <% end -%>
+end
+
+group :test do
+  gem "rspec", ">= 2.0.0.a"
+  <% if use_sequel? -%>
+  gem "openhood-rspec_sequel_matchers"
+  <% end -%>
+end
+
+group :cucumber do
+  gem "capybara", ">= 0.3.5"
+  gem "cucumber", ">= 0.6.2"
+end
