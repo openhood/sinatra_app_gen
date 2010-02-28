@@ -2,14 +2,16 @@ class SinatraAppGenerator < RubiGen::Base
   DEFAULT_SHEBANG = File.join(Config::CONFIG['bindir'],
                               Config::CONFIG['ruby_install_name'])
 
+  default_options :namespace => nil,
+                  :orm => "Sequel"
   attr_reader :name, :orm
 
   def initialize(runtime_args, runtime_options = {})
     super
     usage if args.empty?
     @destination_root = File.expand_path(args.shift)
-    @name = (args.shift || base_name).camelize
-    @orm = (args.shift || "Sequel").underscore
+    @name = (options[:namespace] || base_name).camelize
+    @orm = options[:orm]
   end
 
   def template(m, filename)
@@ -49,23 +51,31 @@ class SinatraAppGenerator < RubiGen::Base
   
   protected
     def use_sequel?
-      @orm.eql?("sequel")
+      @orm.eql?("Sequel")
     end
 
     def use_mongomapper?
-      @orm.eql?("mongo_mapper")
+      @orm.eql?("MongoMapper")
     end
 
     def banner
       <<-EOS
 Creates a new Sinatra / Sequel or MongoMapper / RSpec / Cucumber app.
 
-USAGE: #{spec.name} directory_name [module_name] [orm]
-
-[module_name]: this will be camelized and used as base module for your application
-[orm]: possible value are sequel (or Sequel) and mongo_mapper (or MongoMapper)
-
+USAGE: #{spec.name} directory_name [options]
 EOS
+    end
+    
+    def add_options!(opts)
+      opts.separator ''
+      opts.separator "#{File.basename($0)} options:"
+      opts.on("--namespace my_namespace", "Use a different module name (default is camelized directory_name).") do |o|
+        options[:namespace] = o
+      end
+      opts.on("--orm ORM", ["Sequel", "MongoMapper"], "Specify which ORM to use (Default: Sequel; Possible: Sequel, MongoMapper)") do |o|
+        options[:orm] = o
+      end
+      opts.on("-v", "--version", "Show the #{File.basename($0)} version number and quit.")
     end
 
     # Installation skeleton.  Intermediate directories are automatically

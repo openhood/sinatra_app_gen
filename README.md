@@ -13,13 +13,11 @@ How-to use ?
     
     # Change the application base module name
     # given module name is camelized
-    sinatra_app my_app sinatra_sequel
+    sinatra_app my_app --namespace=sinatra_sequel
     or
-    sinatra_app my_app SinatraSequel
+    sinatra_app my_app --namespace=SinatraSequel
     
     # Use MongoMapper instead of Sequel
-    sinatra_app my_app sinatra_mongo mongo_mapper
-    or
-    sinatra_app my_app SinatraMongo MongoMapper
+    sinatra_app my_app --orm=MongoMapper
 
     ... WIP
