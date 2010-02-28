@@ -53,7 +53,7 @@ class SinatraAppGenerator < RubiGen::Base
     end
 
     def use_mongomapper?
-      @orm.eql?("mongomapper")
+      @orm.eql?("mongo_mapper")
     end
 
     def banner
@@ -61,6 +61,9 @@ class SinatraAppGenerator < RubiGen::Base
 Creates a new Sinatra / Sequel or MongoMapper / RSpec / Cucumber app.
 
 USAGE: #{spec.name} directory_name [module_name] [orm]
+
+[module_name]: this will be camelized and used as base module for your application
+[orm]: possible value are sequel (or Sequel) and mongo_mapper (or MongoMapper)
 
 EOS
     end

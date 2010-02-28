@@ -12,6 +12,9 @@ Feature: Generator
     Creates a new Sinatra / Sequel or MongoMapper / RSpec / Cucumber app.
 
     USAGE: sinatra_app directory_name [module_name] [orm]
+    
+    [module_name]: this will be camelized and used as base module for your application
+    [orm]: possible value are sequel (or Sequel) and mongo_mapper (or MongoMapper)
     """
 
     Examples:
@@ -41,16 +44,22 @@ Feature: Generator
     And the file "Gemfile" should contain "<gemfile_2>"
 
     Examples:
-      | ruby_version | args                        | app_name | gemfile_1 | gemfile_2    |
-      | ree-1.8.7    | demo_app                    | DemoApp  | kamk-pg   | sequel       |
-      | ree-1.8.7    | demo_app my_app             | MyApp    | kamk-pg   | sequel       |
-      | ree-1.8.7    | demo_app my_app sequel      | MyApp    | kamk-pg   | sequel       |
-      | ree-1.8.7    | demo_app my_app mongomapper | MyApp    | mongo_ext | mongo_mapper |
-      | 1.9.1        | demo_app                    | DemoApp  | kamk-pg   | sequel       |
-      | 1.9.1        | demo_app my_app             | MyApp    | kamk-pg   | sequel       |
-      | 1.9.1        | demo_app my_app sequel      | MyApp    | kamk-pg   | sequel       |
-      | 1.9.1        | demo_app my_app mongomapper | MyApp    | mongo_ext | mongo_mapper |
-      | 1.9.2-head   | demo_app                    | DemoApp  | kamk-pg   | sequel       |
-      | 1.9.2-head   | demo_app my_app             | MyApp    | kamk-pg   | sequel       |
-      | 1.9.2-head   | demo_app my_app sequel      | MyApp    | kamk-pg   | sequel       |
-      | 1.9.2-head   | demo_app my_app mongomapper | MyApp    | mongo_ext | mongo_mapper |
+      | ruby_version | args                         | app_name | gemfile_1 | gemfile_2    |
+      | ree-1.8.7    | demo_app                     | DemoApp  | kamk-pg   | sequel       |
+      | ree-1.8.7    | demo_app my_app              | MyApp    | kamk-pg   | sequel       |
+      | ree-1.8.7    | demo_app my_app sequel       | MyApp    | kamk-pg   | sequel       |
+      | ree-1.8.7    | demo_app my_app Sequel       | MyApp    | kamk-pg   | sequel       |
+      | ree-1.8.7    | demo_app my_app mongo_mapper | MyApp    | mongo_ext | mongo_mapper |
+      | ree-1.8.7    | demo_app my_app MongoMapper  | MyApp    | mongo_ext | mongo_mapper |
+      | 1.9.1        | demo_app                     | DemoApp  | kamk-pg   | sequel       |
+      | 1.9.1        | demo_app my_app              | MyApp    | kamk-pg   | sequel       |
+      | 1.9.1        | demo_app my_app sequel       | MyApp    | kamk-pg   | sequel       |
+      | 1.9.1        | demo_app my_app Sequel       | MyApp    | kamk-pg   | sequel       |
+      | 1.9.1        | demo_app my_app mongo_mapper | MyApp    | mongo_ext | mongo_mapper |
+      | 1.9.1        | demo_app my_app MongoMapper  | MyApp    | mongo_ext | mongo_mapper |
+      | 1.9.2-head   | demo_app                     | DemoApp  | kamk-pg   | sequel       |
+      | 1.9.2-head   | demo_app my_app              | MyApp    | kamk-pg   | sequel       |
+      | 1.9.2-head   | demo_app my_app sequel       | MyApp    | kamk-pg   | sequel       |
+      | 1.9.2-head   | demo_app my_app Sequel       | MyApp    | kamk-pg   | sequel       |
+      | 1.9.2-head   | demo_app my_app mongo_mapper | MyApp    | mongo_ext | mongo_mapper |
+      | 1.9.2-head   | demo_app my_app MongoMapper  | MyApp    | mongo_ext | mongo_mapper |
