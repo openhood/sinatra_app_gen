@@ -3,11 +3,13 @@ source "http://gems.github.com"
 
 gem "thin"
 gem "sinatra", "~> 1.0a"
+<% if use_async? -%>
 gem "raggi-async_sinatra"
+<% end -%>
 gem "haml", ">= 2.2.2"
 gem "yajl-ruby"
 <% if use_sequel? -%>
-gem "kamk-pg"
+gem "pg", "~> 0.9.0"
 gem "sequel"
 <% elsif use_mongomapper? -%>
 gem "mongo_ext", :require => nil
@@ -15,27 +17,33 @@ gem "mongo_mapper"
 <% end -%>
 gem "JosephHalter-string_cleaner"
 gem "nakajima-rack-flash"
-gem "openhood-sinatra_rake_tasks"
+gem "sinatra_rake_tasks", ">= 0.2.0"
 
 group :development do
   gem "shotgun"
 end
+<% if use_rspec? || use_cucumber? -%>
 
 group :test, :cucumber do
   gem "timecop"
-  <% if use_mongomapper? -%>
-  gem "machinist_mongo", :require => "machinist/mongo_mapper"  
-  <% end -%>
+<% if use_mongomapper? -%>
+  gem "machinist_mongo", :require => "machinist/mongo_mapper"
+<% end -%>
 end
+<% end -%>
+<% if use_rspec? -%>
 
 group :test do
   gem "rspec", ">= 2.0.0.a"
-  <% if use_sequel? -%>
-  gem "openhood-rspec_sequel_matchers"
-  <% end -%>
+<% if use_sequel? -%>
+  gem "rspec_sequel_matchers", ">= 0.2.0"
+<% end -%>
 end
+<% end -%>
+<% if use_cucumber? -%>
 
 group :cucumber do
   gem "capybara", ">= 0.3.5"
   gem "cucumber", ">= 0.6.2"
 end
+<% end -%>

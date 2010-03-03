@@ -4,7 +4,7 @@ require "rake"
 begin
   require "jeweler"
   Jeweler::Tasks.new do |gem|
-    gem.version = "0.1.5"
+    gem.version = "0.2.0"
     gem.name = "sinatra_app_gen"
     gem.summary = "Creates a new Sinatra / Sequel or MongoMapper / RSpec / Cucumber / Bundler app."
     gem.description = "Our default app template"
@@ -14,9 +14,9 @@ begin
     gem.add_dependency "rubigen"
     gem.add_development_dependency "jeweler"
     gem.add_development_dependency "cucumber", ">= 0.6.2"
-    gem.add_development_dependency "cucumber-rails", ">= 0.3.0"
     gem.add_development_dependency "rspec", ">= 2.0.0a"
     gem.add_development_dependency "aruba", ">= 0.1.6"
+    gem.add_development_dependency "bundler", ">= 0.9.9"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError

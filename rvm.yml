@@ -8,3 +8,4 @@ dev_gems:
   - cucumber -v '>= 0.6.2'
   - rspec -v '>= 2.0.0.a9'
   - aruba -v '>= 0.1.6'
+  - bundler

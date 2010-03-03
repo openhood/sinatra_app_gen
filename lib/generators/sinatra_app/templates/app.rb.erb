@@ -23,7 +23,9 @@ require "sequel/extensions/blank"
 require "sequel/extensions/inflector"
 <% end -%>
 require "sinatra/base"
+<% if use_async? -%>
 require "sinatra/async"
+<% end %>
 require "rack-flash"
 require "string_cleaner"
 
@@ -34,7 +36,7 @@ module <%= name %>
     def self.config
       @@config ||= begin
         filename = File.join(File.dirname(__FILE__), "config", "#{environment}.yml")
-        File.exists?(filename) ? YAML.load_file(filename) : {:db => {:uri => "sqlite:/"}}
+        File.exists?(filename) ? YAML.load_file(filename) : raise("No config/#{environment}.yml found")
       end
     end
 
@@ -50,7 +52,12 @@ module <%= name %>
       FileUtils.mkdir_p File.join(root, "log")
       logger = Logger.new(File.join(root, "log", "#{environment}.log"))
       logger.level = production? ? Logger::ERROR : Logger::DEBUG
+<% if use_sequel? -%>
       Sequel.connect(config[:db][:uri], :loggers => [logger])
+<% elsif use_mongomapper? -%>
+      MongoMapper.connection = Mongo::Connection.new(config[:db][:host] || "127.0.0.1", config[:db][:port] || 27017, {:logger => logger})
+      MongoMapper.database = config[:db][:name] || "<%= name -%>-#{environment}"
+<% end -%>
 
       # load models
       Dir.glob(File.join(root, "models", "*.rb")).each do |m|

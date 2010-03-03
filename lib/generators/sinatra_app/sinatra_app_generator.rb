@@ -3,15 +3,17 @@ class SinatraAppGenerator < RubiGen::Base
                               Config::CONFIG['ruby_install_name'])
 
   default_options :namespace => nil,
-                  :orm => "Sequel"
-  attr_reader :name, :orm
+                  :orm => "Sequel",
+                  :async => true,
+                  :rspec => true,
+                  :cucumber => true
+  attr_reader :name
 
   def initialize(runtime_args, runtime_options = {})
     super
     usage if args.empty?
     @destination_root = File.expand_path(args.shift)
     @name = (options[:namespace] || base_name).camelize
-    @orm = options[:orm]
   end
 
   def template(m, filename)
@@ -30,32 +32,50 @@ class SinatraAppGenerator < RubiGen::Base
       template m, "Gemfile"
       template m, "Rakefile"
 
-      # cucumber
-      m.directory "features/support"
-      m.directory "features/step_definitions"
-      template m, "features/support/env.rb"
-      template m, "features/support/paths.rb"
-      template m, "features/step_definitions/web_steps.rb"
+      # config
+      m.directory "config"
+      template m, "config/test.yml"
 
-      # rspec
-      m.directory "spec"
-      template m, "spec/spec_helper.rb"
-      m.directory "spec/support"
-      template m, "spec/support/blueprints.rb"
-
-      # lib
-      m.directory "lib"
-      template m, "lib/rack_fix.rb"
+      if use_cucumber?
+        # cucumber
+        m.directory "features/support"
+        m.directory "features/step_definitions"
+        template m, "features/support/env.rb"
+        template m, "features/support/paths.rb"
+        template m, "features/step_definitions/web_steps.rb"
+      end
+      
+      if use_rspec?
+        # rspec
+        m.directory "spec"
+        template m, "spec/spec_helper.rb"
+        m.directory "spec/support"
+        template m, "spec/support/blueprints.rb"
+        m.directory "spec/models"
+        template m, "spec/models/demo_spec.rb"
+      end
     end
   end
-  
+
   protected
     def use_sequel?
-      @orm.eql?("Sequel")
+      options[:orm].eql?("Sequel")
     end
 
     def use_mongomapper?
-      @orm.eql?("MongoMapper")
+      options[:orm].eql?("MongoMapper")
+    end
+
+    def use_async?
+      options[:async]
+    end
+
+    def use_rspec?
+      options[:rspec]
+    end
+
+    def use_cucumber?
+      options[:cucumber]
     end
 
     def banner
@@ -65,7 +85,7 @@ Creates a new Sinatra / Sequel or MongoMapper / RSpec / Cucumber app.
 USAGE: #{spec.name} directory_name [options]
 EOS
     end
-    
+
     def add_options!(opts)
       opts.separator ''
       opts.separator "#{File.basename($0)} options:"
@@ -74,6 +94,15 @@ EOS
       end
       opts.on("--orm ORM", ["Sequel", "MongoMapper"], "Specify which ORM to use (Default: Sequel; Possible: Sequel, MongoMapper)") do |o|
         options[:orm] = o
+      end
+      opts.on("--[no-]async", "Specify if you want to have async built-in via sinatra-async (Default: true)") do |o|
+        options[:async] = o
+      end
+      opts.on("--[no-]rspec", "Specify if you want to have RSpec built-in (Default: true)") do |o|
+        options[:rspec] = o
+      end
+      opts.on("--[no-]cucumber", "Specify if you want to have Cucumber built-in (Default: true)") do |o|
+        options[:cucumber] = o
       end
       opts.on("-v", "--version", "Show the #{File.basename($0)} version number and quit.")
     end

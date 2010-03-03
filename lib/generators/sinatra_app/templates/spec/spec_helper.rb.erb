@@ -19,25 +19,26 @@ require "rspec_sequel_matchers"
   c.disable :logging
 end
 
-Spec::Runner.configure do |config|
-  <% if use_sequel? -%>
-  config.include(RspecSequel::Matchers)
-
-  config.before(:suite) do
+Rspec.configure do |c|
+  c.mock_framework = :rspec
+  c.color_enabled = true
+<% if use_sequel? -%>
+  c.include(RspecSequel::Matchers)
+  c.before(:suite) do
     Sequel::Model.db.tables.each do |table_name|
       Sequel::Model.db.drop_table table_name
     end
-    dirname = File.join(<%= name %>::App.root, "..", "migrations")
+    dirname = File.join(TestRspec::App.root, "..", "migrations")
     Sequel::Migrator.apply(Sequel::Model.db, dirname) if File.directory?(dirname)
   end
-  config.after(:each) do
+  c.after(:each) do
     Sequel::Model.db.tables.each do |table_name|
       Sequel::Model.db["TRUNCATE #{table_name}"]
     end
   end
-  <% elsif use_mongomapper? -%>
+<% elsif use_mongomapper? -%>
   config.before(:each) do
     ::MongoMapper.database.collections.each{|c| c.remove}
   end
-  <% end -%>
+<% end -%>
 end

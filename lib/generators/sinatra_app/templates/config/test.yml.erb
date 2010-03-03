@@ -1,0 +1,8 @@
+:db:
+<% if use_sequel? -%>
+  :uri: postgres://localhost/<%= name.underscore -%>_test
+<% elsif use_mongomapper? -%>
+  :host: 127.0.0.1
+  :port: 27017
+  :name: <%= name.underscore -%>_test
+<% end -%>
