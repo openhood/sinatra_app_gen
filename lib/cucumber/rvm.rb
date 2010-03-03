@@ -1,3 +1,5 @@
+# Initial idea and code from work on cucumber-rails by Aslak Hellesøy
+# http://github.com/aslakhellesoy/cucumber-rails
 module Cucumber
   class Rvm #:nodoc:
     RVMS = YAML.load_file(File.dirname(__FILE__) + '/../../rvm.yml')
