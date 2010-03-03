@@ -42,6 +42,7 @@ class SinatraAppGenerator < RubiGen::Base
         m.directory "features/step_definitions"
         template m, "features/support/env.rb"
         template m, "features/support/paths.rb"
+        template m, "features/support/blueprints.rb" unless use_rspec?
         template m, "features/step_definitions/web_steps.rb"
       end
       

@@ -12,7 +12,7 @@ gem "yajl-ruby"
 gem "pg", "~> 0.9.0"
 gem "sequel"
 <% elsif use_mongomapper? -%>
-gem "mongo_ext", :require => nil
+gem "mongo_ext", "0.18.3", :require => nil
 gem "mongo_mapper"
 <% end -%>
 gem "JosephHalter-string_cleaner"
@@ -22,26 +22,23 @@ gem "sinatra_rake_tasks", ">= 0.2.0"
 group :development do
   gem "shotgun"
 end
-<% if use_rspec? || use_cucumber? -%>
-
+<% if use_rspec? || use_cucumber? %>
 group :test, :cucumber do
   gem "timecop"
+  gem "rspec", ">= 2.0.0.a"
 <% if use_mongomapper? -%>
   gem "machinist_mongo", :require => "machinist/mongo_mapper"
 <% end -%>
 end
 <% end -%>
-<% if use_rspec? -%>
-
+<% if use_rspec? %>
 group :test do
-  gem "rspec", ">= 2.0.0.a"
 <% if use_sequel? -%>
   gem "rspec_sequel_matchers", ">= 0.2.0"
 <% end -%>
 end
 <% end -%>
-<% if use_cucumber? -%>
-
+<% if use_cucumber? %>
 group :cucumber do
   gem "capybara", ">= 0.3.5"
   gem "cucumber", ">= 0.6.2"

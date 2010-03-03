@@ -1,6 +1,6 @@
 begin
   # Try to require the preresolved locked set of gems.
-  require File.expand_path('../.bundle/environment', __FILE__)
+  require ::File.expand_path('../.bundle/environment', __FILE__)
 rescue LoadError
   # Fall back on doing an unlocked resolve at runtime.
   require "rubygems"
@@ -35,22 +35,22 @@ module <%= name %>
     # load environment config
     def self.config
       @@config ||= begin
-        filename = File.join(File.dirname(__FILE__), "config", "#{environment}.yml")
-        File.exists?(filename) ? YAML.load_file(filename) : raise("No config/#{environment}.yml found")
+        filename = ::File.join(::File.dirname(__FILE__), "config", "#{environment}.yml")
+        ::File.exists?(filename) ? YAML.load_file(filename) : raise("No config/#{environment}.yml found")
       end
     end
 
     configure do
-      set :root, File.dirname(__FILE__)
+      set :root, ::File.dirname(__FILE__)
       set :static, true
-      set :public, File.join(root, "public")
-      set :views, File.join(root, "views")
+      set :public, ::File.join(root, "public")
+      set :views, ::File.join(root, "views")
       enable :logging
       enable :sessions
 
       # setup logger and connect to db
-      FileUtils.mkdir_p File.join(root, "log")
-      logger = Logger.new(File.join(root, "log", "#{environment}.log"))
+      FileUtils.mkdir_p ::File.join(root, "log")
+      logger = Logger.new(::File.join(root, "log", "#{environment}.log"))
       logger.level = production? ? Logger::ERROR : Logger::DEBUG
 <% if use_sequel? -%>
       Sequel.connect(config[:db][:uri], :loggers => [logger])
@@ -60,7 +60,7 @@ module <%= name %>
 <% end -%>
 
       # load models
-      Dir.glob(File.join(root, "models", "*.rb")).each do |m|
+      Dir.glob(::File.join(root, "models", "*.rb")).each do |m|
         require m
       end
 
@@ -70,9 +70,9 @@ module <%= name %>
         def config
           <%= name %>::App.config
         end
-        Dir.glob(File.join(root, "helpers", "*.rb")).each do |h|
+        Dir.glob(::File.join(root, "helpers", "*.rb")).each do |h|
           require h
-          module_name = "#{File.basename(h, ".rb").camelize}Helper"
+          module_name = "#{::File.basename(h, ".rb").camelize}Helper"
           include <%= name %>.const_get(module_name) if <%= name %>.const_defined?(module_name)
         end
       end
@@ -82,7 +82,7 @@ module <%= name %>
     end
 
     # load fake controllers
-    Dir.glob(File.join(root, "controllers", "*.rb")).each do |c|
+    Dir.glob(::File.join(root, "controllers", "*.rb")).each do |c|
       require c
     end
 
