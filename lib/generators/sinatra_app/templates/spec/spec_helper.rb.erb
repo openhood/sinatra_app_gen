@@ -37,7 +37,7 @@ Rspec.configure do |c|
     end
   end
 <% elsif use_mongomapper? -%>
-  config.before(:each) do
+  c.before(:each) do
     ::MongoMapper.database.collections.each{|c| c.remove}
   end
 <% end -%>
