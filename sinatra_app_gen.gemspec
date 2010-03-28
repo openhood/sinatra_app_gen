@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sinatra_app_gen}
-  s.version = "0.2.0"
+  s.version = "0.2.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jonathan Tron", "Joseph Halter"]
-  s.date = %q{2010-03-03}
+  s.date = %q{2010-03-28}
   s.default_executable = %q{sinatra_app}
   s.description = %q{Our default app template}
   s.email = %q{team@openhood.com}

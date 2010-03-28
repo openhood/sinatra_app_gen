@@ -4,7 +4,7 @@ require "rake"
 begin
   require "jeweler"
   Jeweler::Tasks.new do |gem|
-    gem.version = "0.2.0"
+    gem.version = "0.2.1"
     gem.name = "sinatra_app_gen"
     gem.summary = "Creates a new Sinatra / Sequel or MongoMapper / RSpec / Cucumber / Bundler app."
     gem.description = "Our default app template"
